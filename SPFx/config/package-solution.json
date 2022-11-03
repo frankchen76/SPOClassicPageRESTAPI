@@ -1,0 +1,46 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "AzureFuncWP",
+        "id": "7adcb219-cad5-41dd-9b70-0f8633c83b1e",
+        "version": "1.0.0.2",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true,
+        "isDomainIsolated": false,
+        "developer": {
+            "name": "",
+            "websiteUrl": "",
+            "privacyUrl": "",
+            "termsOfUseUrl": "",
+            "mpnId": "Undefined-1.15.2"
+        },
+        "metadata": {
+            "shortDescription": {
+                "default": "AzureFuncWP description"
+            },
+            "longDescription": {
+                "default": "AzureFuncWP description"
+            },
+            "screenshotPaths": [],
+            "videoUrl": "",
+            "categories": []
+        },
+        "features": [
+            {
+                "title": "azure-func-wp Feature",
+                "description": "The feature that activates elements of the azure-func-wp solution.",
+                "id": "75c46920-d723-4fa2-8ca4-b7016dadd357",
+                "version": "1.0.0.0"
+            }
+        ],
+        "webApiPermissionRequests": [
+            {
+                "resource": "mngenv626552-spoclassicfunc01-idp",
+                "scope": "user_impersonation"
+            }
+        ]
+    },
+    "paths": {
+        "zippedPackage": "solution/azure-func-wp.sppkg"
+    }
+}

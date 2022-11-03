@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+        "name": "Hosted workbench",
+        "type": "pwa-chrome",
+        "request": "launch",
+        "url": "https://mngenv626552.sharepoint.com/sites/SPFx-Dev/_layouts/workbench.aspx",
+        "webRoot": "${workspaceRoot}",
+        "sourceMaps": true,
+        "sourceMapPathOverrides": {
+            "webpack:///.././src/*": "${webRoot}/src/*",
+            "webpack:///../../../src/*": "${webRoot}/src/*",
+            "webpack:///../../../../src/*": "${webRoot}/src/*",
+            "webpack:///../../../../../src/*": "${webRoot}/src/*"
+        },
+        "runtimeArgs": [
+            "--remote-debugging-port=9222",
+            "-incognito"
+        ]
+    }]
+}

@@ -11,6 +11,19 @@
             redirectUri: "https://mngenv626552.sharepoint.com/sites/ClassicPublishing01/Pages/MSALTest.aspx",
         }
     };
+    // mngenv626552-spoclassicfunc01-idp
+    const customApiInfo = {
+        scopes: {
+            scopes: ["api://b26a8ccd-7785-4aa6-a7bb-12de1180e138/.default"]
+        },
+        url: "https://mngenv626552-spoclassicfunc01.azurewebsites.net/api/ServiceFunc"
+    };
+    const graphApiInfo = {
+        scopes: {
+            scopes: ["user.read", "mail.send"]
+        },
+        url: "https://graph.microsoft.com/v1.0/me"
+    }
 
     const msalInstance = new Msal.UserAgentApplication(msalConfig);
 
@@ -28,9 +41,32 @@
         msalInstance.loginPopup(loginRequest)
             .then(response => {
                 // handle response
-                let divLoginInfo = document.getElementById("loginInfo");
-                if (divLoginInfo) {
-                    divLoginInfo.innerHTML = `Welcome ${response.account.userName}`
+                this.logMessage(`Welcome ${response.account.userName}`);
+                function onTestMSGraphAPIHandler() {
+                    if (msalInstance.getAccount()) {
+                        this.getAccessToken(graphApiInfo.scopes).then(token => {
+                            this.callAPI(graphApiInfo.url, token);
+                        });
+                    } else {
+                        // user is not logged in, you will need to log them in to acquire a token
+                        this.logMessage("Please login in first. ");
+                    }
+
+                }
+                function onTestCustomAPIHandler() {
+                    if (msalInstance.getAccount()) {
+                        this.getAccessToken(customApiInfo.scopes).then(token => {
+                            this.callAPI(customApiInfo.url, token);
+                        });
+                    } else {
+                        // user is not logged in, you will need to log them in to acquire a token
+                        this.logMessage("Please login in first. ");
+                    }
+
+                }
+                function onTestCustomAPIWOAuthHandler() {
+                    this.callAPI(customApiInfo.url, null);
+
                 }
                 console.log(response);
             })
@@ -102,15 +138,9 @@
 
     }
     function onTestMSGraphAPIHandler() {
-        let apiInfo = {
-            scopes: {
-                scopes: ["user.read", "mail.send"]
-            },
-            url: "https://graph.microsoft.com/v1.0/me"
-        }
         if (msalInstance.getAccount()) {
-            this.getAccessToken(apiInfo.scopes).then(token => {
-                this.callAPI(apiInfo.url, token);
+            this.getAccessToken(graphApiInfo.scopes).then(token => {
+                this.callAPI(graphApiInfo.url, token);
             });
         } else {
             // user is not logged in, you will need to log them in to acquire a token
@@ -119,15 +149,9 @@
 
     }
     function onTestCustomAPIHandler() {
-        let apiInfo = {
-            scopes: {
-                scopes: ["api://1ac28381-e8e0-4554-8bf6-a2ec21596efc/.default"]
-            },
-            url: "https://mngenv626552-spoclassicfunc01.azurewebsites.net/api/ServiceFunc"
-        }
         if (msalInstance.getAccount()) {
-            this.getAccessToken(apiInfo.scopes).then(token => {
-                this.callAPI(apiInfo.url, token);
+            this.getAccessToken(customApiInfo.scopes).then(token => {
+                this.callAPI(customApiInfo.url, token);
             });
         } else {
             // user is not logged in, you will need to log them in to acquire a token
@@ -136,15 +160,10 @@
 
     }
     function onTestCustomAPIWOAuthHandler() {
-        let apiInfo = {
-            scopes: {
-                scopes: ["api://1ac28381-e8e0-4554-8bf6-a2ec21596efc/.default"]
-            },
-            url: "https://mngenv626552-spoclassicfunc01.azurewebsites.net/api/ServiceFunc"
-        }
-        this.callAPI(apiInfo.url, null);
+        this.callAPI(customApiInfo.url, null);
 
     }
+
 </script>
 <h1>Home</h1>
 <input type="button" value="Login" onclick="javascript:onLoginHandler();">

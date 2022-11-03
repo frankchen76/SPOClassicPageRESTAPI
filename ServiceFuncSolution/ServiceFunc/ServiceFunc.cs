@@ -7,13 +7,24 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Design;
+using ServiceFunc.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ServiceFunc
 {
-    public static class ServiceFunc
+    public class ServiceFunc
     {
+        private readonly ProductDBContext _dbContext;
+        public ServiceFunc(ProductDBContext dbContext)
+        {
+            this._dbContext = dbContext;
+        }
         [FunctionName("ServiceFunc")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -28,13 +39,27 @@ namespace ServiceFunc
             string responseMessage = string.IsNullOrEmpty(name)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
-            OrderItem item = new OrderItem()
-            {
-                Id = 1,
-                Title = "test"
-            };
 
-            return new OkObjectResult(item);
+            var ret = new List<ProductItem>();
+            var query = from p in this._dbContext.Products
+                         where p.ListPrice > 0
+                         select p;
+            var result = await query.Take(10).ToListAsync();
+            if(result !=null)
+            {
+                foreach(var item in result)
+                {
+                    ret.Add(new ProductItem()
+                    { 
+                        Id=item.ProductId,
+                        Number=item.ProductNumber,
+                        Price=item.ListPrice
+                    });
+                }
+            }
+
+
+            return new OkObjectResult(ret);
         }
     }
 }

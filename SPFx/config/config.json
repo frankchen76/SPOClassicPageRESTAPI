@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "azure-func-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/azureFunc/AzureFuncWebPart.js",
+          "manifest": "./src/webparts/azureFunc/AzureFuncWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AzureFuncWebPartStrings": "lib/webparts/azureFunc/loc/{locale}.js"
+  }
+}
